@@ -212,7 +212,7 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
 
         tvTitle.setText("New Call From:\n" + mHostId);
 
-        avRootView.setAutoOrientation(false);
+        //avRootView.setAutoOrientation(false);
         ILVCallManager.getInstance().initAvView(avRootView);
     }
 
