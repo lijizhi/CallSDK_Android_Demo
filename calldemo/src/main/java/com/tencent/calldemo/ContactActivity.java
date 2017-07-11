@@ -254,7 +254,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     }
 
     private boolean isValidPassword(String password) {
-        return password.length() >= 8 && password.length() <= 16 && password.matches("^[A-Za-z0-9]$");
+        return password.length() >= 8 && password.length() <= 16 && password.matches("^[A-Za-z0-9]*$");
     }
 
     private boolean isValidUserName(String userName) {
