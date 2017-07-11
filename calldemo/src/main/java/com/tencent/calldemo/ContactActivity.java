@@ -217,27 +217,83 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
             addCallList(calllist);
             makeCall(ILVCallConstants.CALL_TYPE_VIDEO, nums);
         }else if (R.id.regist == v.getId()){
-            if (TextUtils.isEmpty(idInput.getText().toString()) || TextUtils.isEmpty(pwdInput.getText().toString())) {
-                Toast.makeText(ContactActivity.this, "Regist failed: account or password is empty!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                regist(idInput.getText().toString(), pwdInput.getText().toString());
-            }
+            tryRegister();
         }else if (R.id.confirm == v.getId()){
-            if (TextUtils.isEmpty(idInput.getText().toString()) || TextUtils.isEmpty(pwdInput.getText().toString())) {
-                Toast.makeText(ContactActivity.this, "Login failed: account or password is empty!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                login(idInput.getText().toString(), pwdInput.getText().toString());
-            }
+            tryLogin();
         }else if (R.id.btn_add == v.getId()){
             addNewInputNumbers();
         }
     }
 
+    private void tryRegister() {
+
+        idInput.setError(null);
+        pwdInput.setError(null);
+
+        final String userName = idInput.getText().toString();
+        final String password = pwdInput.getText().toString();
+
+        boolean cancel = false;
+        View focusAfter = null;
+
+        if (TextUtils.isEmpty(userName) || !isValidUserName(userName)) {
+            idInput.setError(getString(R.string.tip_hit_account));
+            focusAfter = idInput;
+            cancel = true;
+        } else if (TextUtils.isEmpty(password) || !isValidPassword(password)) {
+            pwdInput.setError(getString(R.string.tip_hit_password));
+            focusAfter = pwdInput;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusAfter.requestFocus();
+        } else {
+            regist(idInput.getText().toString(), pwdInput.getText().toString());
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8 && password.length() <= 16 && password.matches("^[A-Za-z0-9]$");
+    }
+
+    private boolean isValidUserName(String userName) {
+        return userName.length() >= 4 &&
+                userName.length() <= 24 &&
+                userName.matches("^[A-Za-z0-9]*[A-Za-z][A-Za-z0-9]*$");
+    }
+
     @Override
     public void onRecvNotification(int callid, ILVCallNotification notification) {
         addLogMessage("onRecvNotification->notify id:"+notification.getNotifId()+"|"+notification.getUserInfo()+"/"+notification.getSender());
+    }
+
+    private void tryLogin() {
+
+        idInput.setError(null);
+        pwdInput.setError(null);
+
+        final String userName = idInput.getText().toString();
+        final String password = pwdInput.getText().toString();
+
+        boolean cancel = false;
+        View focusAfter = null;
+
+        if (TextUtils.isEmpty(userName)) {
+            idInput.setError("用户名不可为空");
+            focusAfter = idInput;
+            cancel = true;
+        } else if (TextUtils.isEmpty(password)) {
+            pwdInput.setError("密码不可为空");
+            focusAfter = pwdInput;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusAfter.requestFocus();
+        } else {
+            login(idInput.getText().toString(), pwdInput.getText().toString());
+        }
     }
 
     /**
