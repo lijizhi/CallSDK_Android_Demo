@@ -138,4 +138,4 @@ ILVCallManager.getInstance().addCallListener(new ILVCallListener() {
         ILVCallManager.getInstance().initAvView(avRootView);
 ```  
 
-更多接口参考[API文档](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
+更多接口参考[API文档](https://zhaoyang21cn.github.io/iLiveSDK_Help/callsdk/)
