@@ -324,9 +324,4 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
     public void onMicEvent(String id, boolean bEnable) {
         addLogMessage("["+id+"] "+(bEnable?"open":"close")+" mic");
     }
-
-    @Override
-    public void onMemberEvent(String id, boolean bEnter) {
-        addLogMessage("["+id+"] "+(bEnter?"join":"exit")+" call");
-    }
 }
