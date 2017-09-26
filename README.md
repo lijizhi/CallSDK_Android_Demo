@@ -11,11 +11,11 @@ CallSDK在Android Studio上开发。 导入只需要在gradle里增加一行（�
 
 *导入CallSdk *
 
-compile 'com.tencent.callsdk:callsdk:1.0.27'
+compile 'com.tencent.callsdk:callsdk:1.0.28'
 
 *导入iLiveSDK *
 
-compile 'com.tencent.ilivesdk:ilivesdk:1.6.0.2'
+compile 'com.tencent.ilivesdk:ilivesdk:1.7.0'
 
 ps: 上面iLiveSDK的版本请使用[最新版本](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)
 
