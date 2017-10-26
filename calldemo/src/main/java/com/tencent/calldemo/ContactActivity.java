@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.TIMConnListener;
 import com.tencent.TIMManager;
 import com.tencent.callsdk.ILVCallConfig;
 import com.tencent.callsdk.ILVCallConstants;
@@ -155,6 +156,23 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         ILVCallManager.getInstance().init(new ILVCallConfig()
                 .setNotificationListener(this)
                 .setAutoBusy(true));
+
+        TIMManager.getInstance().setConnectionListener(new TIMConnListener() {
+            @Override
+            public void onConnected() {
+                Log.e(TAG, "[DEV]onConnected->enter");
+            }
+
+            @Override
+            public void onDisconnected(int i, String s) {
+                Log.e(TAG, "[DEV]onDisconnected->enter: "+i+", "+s);
+            }
+
+            @Override
+            public void onWifiNeedAuth(String s) {
+                Log.e(TAG, "[DEV]onWifiNeedAuth->enter:"+s);
+            }
+        });
 
         initView();
 
