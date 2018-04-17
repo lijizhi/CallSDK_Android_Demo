@@ -1,10 +1,15 @@
 package com.tencent.calldemo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -36,12 +41,15 @@ import com.tencent.ilivesdk.core.ILiveLoginManager;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 联系人界面
  */
 public class ContactActivity extends Activity implements View.OnClickListener, ILVIncomingListener, ILVCallListener, ILVCallNotificationListener {
     private static String TAG = "ContactActivity";
+    private final static int REQ_PERMISSION_CODE = 0x100;
+
     private TextView tvMyAddr, tvMsg;
     private EditText etDstAddr, idInput, pwdInput;
     private ListView lvCallList;
@@ -152,6 +160,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         }else {
             ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400016949, 8002);
         }
+
+        checkPermission();
 
         ILVCallManager.getInstance().init(new ILVCallConfig()
                 .setNotificationListener(this)
@@ -497,5 +507,54 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     @Override
     public void onException(int iExceptionId, int errCode, String errMsg) {
         addLogMessage("Exception id:"+iExceptionId+", "+errCode+"-"+errMsg);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQ_PERMISSION_CODE:
+                for (int ret : grantResults){
+                    if (PackageManager.PERMISSION_GRANTED != ret){
+                        addLogMessage("用户没有允许需要的权限，使用可能会受到限制！");
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private Context getContext(){
+        return this;
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            List<String> permissions = new ArrayList<>();
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO)) {
+                permissions.add(Manifest.permission.RECORD_AUDIO);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE)) {
+                permissions.add(Manifest.permission.READ_PHONE_STATE);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)){
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (permissions.size() != 0) {
+                ActivityCompat.requestPermissions(ContactActivity.this,
+                        (String[]) permissions.toArray(new String[0]),
+                        REQ_PERMISSION_CODE);
+                return false;
+            }
+        }
+
+        return true;
     }
 }

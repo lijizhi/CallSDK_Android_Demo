@@ -21,6 +21,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23+'
-    compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'
-    compile 'com.tencent.callsdk:callsdk:1.0.27'
+    compile 'com.tencent.ilivesdk:ilivesdk:1.8.5.2'
+    compile 'com.tencent.callsdk:callsdk:1.0.31'
 }
